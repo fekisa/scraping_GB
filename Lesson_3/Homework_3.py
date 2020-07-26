@@ -14,26 +14,21 @@ hh_vacancies = db.vacancies #создаем привязку к коллекци
 hh_vacancies.insert_many(file_data)
 
 # поиск по БД (зарплата)
-x = int(input('Введите заработную плату для поиска: '))
-for vacancy in hh_vacancies.find({'$or':[
+def find_salary():
+    x = int(input('Введите заработную плату для поиска: '))
+    for vacancy in hh_vacancies.find({'$or':[
                                       {'salary_min': {'$gt': x}}, {'salary_max': {'$gt': x}}
                                      ]},
                                       {'_id':0, 'employer': 1, 'name': 1, 'salary_min': 1, 'salary_max': 1}):
-    print(vacancy)
+        print(vacancy)
 
-# в виде функции
-
-def find_salary():
-    salary = int(input('Введите заработную плату для поиска: '))
-    vacancy = hh_vacancies.find({'salary':{'$gte': salary}}, {'id':0, 'employer': 1, 'name': 1, 'salary_min': 1, 'salary_max': 1})
-    for i in vacancy:
-        print(i)
+find_salary()
 
 # запись в БД новых вакансий
 
 def add_to_db(data):
-    def is_existed_vacancy(vac):
-        a=hh_vacancies.find_one(vac)
+    def is_existed_vacancy(vacancy_data):
+        a=hh_vacancies.find_one(vacancy_data)
         if a:
             return True
         return False
